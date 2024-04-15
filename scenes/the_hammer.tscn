@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://dvp4k4mja17t4"]
+
+[ext_resource type="Script" path="res://scripts/WeaponController.gd" id="1_ea1y5"]
+[ext_resource type="Texture2D" uid="uid://b86nqnqv7701p" path="res://sprites/kenney/tiny-dungeon/tile_0117.png" id="1_ekn4a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_up0b7"]
+size = Vector2(10, 7)
+
+[sub_resource type="Animation" id="Animation_h75og"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HammerSprite:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HammerSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rwtgx"]
+resource_name = "swing"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HammerSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.1, 0.2, 0.25),
+"transitions": PackedFloat32Array(1, 1, -0.5, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(20, 5), Vector2(0, 0), Vector2(-20, 5), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HammerSprite:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.1, 0.2, 0.25),
+"transitions": PackedFloat32Array(1, 1, -0.5, 1, 1),
+"update": 0,
+"values": [0.0, 0.523599, 0.0, -0.523599, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_eh37b"]
+_data = {
+"RESET": SubResource("Animation_h75og"),
+"swing": SubResource("Animation_rwtgx")
+}
+
+[node name="TheHammer" type="Area2D"]
+z_index = 10
+script = ExtResource("1_ea1y5")
+
+[node name="HammerSprite" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = ExtResource("1_ekn4a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.11957e-05, -2.5)
+shape = SubResource("RectangleShape2D_up0b7")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_eh37b")
+}

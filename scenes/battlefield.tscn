@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dmrxjjmx1blrt"]
+[gd_scene load_steps=11 format=3 uid="uid://dmrxjjmx1blrt"]
 
 [ext_resource type="Texture2D" uid="uid://y2r66i22eidd" path="res://sprites/kenney/tiny-dungeon-tilemap.png" id="1_21q4p"]
 [ext_resource type="Texture2D" uid="uid://dwadgimq7g8s1" path="res://sprites/kenney/tiny-dungeon/tile_0086.png" id="2_giyxn"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://scripts/EntitySpawner.gd" id="3_rsuog"]
 [ext_resource type="Texture2D" uid="uid://n7v6po2ji2nb" path="res://sprites/kenney/fantasy-borders/panel-transparent-center-000.png" id="4_aq86e"]
 [ext_resource type="PackedScene" uid="uid://7wtkpj0bycrc" path="res://scenes/the_skeleman.tscn" id="4_imlqk"]
-[ext_resource type="Texture2D" uid="uid://b86nqnqv7701p" path="res://sprites/kenney/tiny-dungeon/tile_0117.png" id="4_qb107"]
 [ext_resource type="Texture2D" uid="uid://bvk2jhgt6x60q" path="res://sprites/kenney/fantasy-borders/panel-transparent-center-000-fill.png" id="5_g4xcf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w8vg7"]
@@ -197,15 +196,6 @@ texture_progress = ExtResource("5_g4xcf")
 
 [node name="Sprite2D" type="Sprite2D" parent="Entities/TheSmith"]
 texture = ExtResource("2_giyxn")
-
-[node name="TheHammer" type="Node2D" parent="Entities/TheSmith"]
-z_index = 10
-position = Vector2(16, 0)
-rotation = 1.5708
-
-[node name="Sprite2D" type="Sprite2D" parent="Entities/TheSmith/TheHammer"]
-y_sort_enabled = true
-texture = ExtResource("4_qb107")
 
 [node name="TheSkeleman" parent="Entities" instance=ExtResource("4_imlqk")]
 position = Vector2(-99, -49)
