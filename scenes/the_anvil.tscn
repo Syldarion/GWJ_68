@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bxs1h0evrtwjn"]
+[gd_scene load_steps=5 format=3 uid="uid://bxs1h0evrtwjn"]
 
 [ext_resource type="Texture2D" uid="uid://b5u52cyw40t0j" path="res://sprites/kenney/tiny-dungeon/tile_0074.png" id="1_ldt87"]
 [ext_resource type="Script" path="res://scripts/AnvilController.gd" id="1_ywtg4"]
+[ext_resource type="Texture2D" uid="uid://eh0c55ojjeah" path="res://sprites/kenney/input-prompts/kbm/keyboard_e.png" id="3_qh167"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qq1m6"]
 size = Vector2(9, 12)
@@ -22,3 +23,9 @@ texture = ExtResource("1_ldt87")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_qq1m6")
+
+[node name="InteractSprite" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -21)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_qh167")

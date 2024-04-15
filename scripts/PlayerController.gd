@@ -3,6 +3,7 @@ extends Node2D
 @export var player_speed = 40
 @export var throw_charge_buildup = 2
 @export var max_throw_charge = 500
+@export var interact_distance = 32
 
 @onready var hammer = $TheHammer
 @onready var charge_bar = $ChargeBar as TextureProgressBar
@@ -46,10 +47,20 @@ func _process(delta):
 			throw_charge = 0
 			charge_bar.visible = false
 			charge_bar.value = 0
+	elif check_distance_to_anvil():
+		spawned_anvil.show_interact_prompt()
+		if Input.is_action_just_pressed("Interact"):
+			holding_anvil = true
+			spawned_anvil.queue_free()
+	else:
+		spawned_anvil.hide_interact_prompt()
 	
 	var mouse_pos = get_local_mouse_position()
 	var angle = mouse_pos.angle()
 	move_hammer(angle)
+
+func check_distance_to_anvil() -> bool:
+	return (spawned_anvil.global_position - global_position).length() <= interact_distance
 
 func throw_anvil(strength, direction):
 	var instance = anvil_scene.instantiate()

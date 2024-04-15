@@ -33,3 +33,9 @@ func damage_entity(damage_amount):
 	current_health = max(current_health - damage_amount, 0)
 	health_bar.value = current_health
 	health_bar.visible = true
+	if current_health <= 0:
+		# TODO: send a signal for death
+		queue_free()
+
+func knockback_entity(knock_velocity):
+	global_position += knock_velocity

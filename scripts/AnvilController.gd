@@ -17,6 +17,13 @@ func _on_RigidBody2D_body_entered(body):
 	if body.is_in_group("enemies"):
 		print_debug("Hit an Enemy")
 		body.damage_entity(60)
+		body.knockback_entity(-linear_velocity)
 
 func _freeze_anvil():
 	freeze = true
+
+func show_interact_prompt():
+	$InteractSprite.visible = true
+
+func hide_interact_prompt():
+	$InteractSprite.visible = false
