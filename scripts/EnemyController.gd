@@ -1,4 +1,4 @@
-extends Node2D
+extends CharacterBody2D
 
 @export var move_speed : float = 20.0
 @export var max_health : int = 100
@@ -23,10 +23,15 @@ func _ready():
 	current_health = max_health
 
 
+func _physics_process(delta):
+	if player_target:
+		var movement_dir = (player_target.global_position - global_position).normalized()
+		move_and_collide(movement_dir * move_speed * delta)
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if player_target:
-		global_position = global_position.move_toward(player_target.global_position, move_speed * delta)
+	pass
 
 
 func damage_entity(damage_amount):
