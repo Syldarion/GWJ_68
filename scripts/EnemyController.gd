@@ -1,9 +1,12 @@
+class_name EnemyController
 extends CharacterBody2D
 
 @export var move_speed : float = 20.0
 @export var max_health : int = 100
 
 @onready var health_bar = $HealthBar as TextureProgressBar
+
+signal enemy_died(location)
 
 var current_health
 var player_target
@@ -39,7 +42,7 @@ func damage_entity(damage_amount):
 	health_bar.value = current_health
 	health_bar.visible = true
 	if current_health <= 0:
-		# TODO: send a signal for death
+		enemy_died.emit(global_position)
 		queue_free()
 
 func knockback_entity(knock_velocity):

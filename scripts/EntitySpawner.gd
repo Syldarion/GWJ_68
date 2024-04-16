@@ -21,11 +21,20 @@ func spawn_wave_offscreen(spawn_data: SpawnWaveData):
 	for i in range(spawn_data.enemy_count):
 		var rand_angle = randf_range(0.0, 2 * PI)
 		var loc_offscreen = Vector2(cos(rand_angle), sin(rand_angle)) * offscreen_spawn_distance
-		spawn_entity(spawn_data.enemy_name, loc_offscreen)
+		spawn_enemy(spawn_data.enemy_name, loc_offscreen)
+
+
+func spawn_enemy(enemy_name, spawn_loc):
+	var enemy = spawn_entity(enemy_name, spawn_loc) as EnemyController
+	enemy.enemy_died.connect(_on_enemy_died)
+
+
+func _on_enemy_died(death_loc):
+	spawn_entity("manarock", death_loc)
 
 
 func spawn_entity(entity_name, spawn_loc):
 	var instance = spawner_list[entity_name].instantiate()
 	instance.global_position = spawn_loc
-	get_parent().add_child(instance)
+	entity_parent.add_child(instance)
 	return instance

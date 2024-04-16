@@ -5,6 +5,10 @@ extends Node2D
 @export var max_throw_charge = 500
 @export var interact_distance = 32
 @export var swing_cooldown = 0.5
+@export var mana_pull_range = 48.0
+@export var mana_min_range = 4.0
+@export var mana_pull_speed = 40.0
+@export var attack_range = 32.0
 
 @onready var charge_bar = $ChargeBar as TextureProgressBar
 
@@ -15,7 +19,6 @@ var throw_charge = 0
 var holding_anvil = true
 var spawned_anvil = null
 
-var attack_range = 32.0
 var time_since_last_swing = 0.0
 
 # Called when the node enters the scene tree for the first time.
@@ -65,6 +68,8 @@ func _process(delta):
 			spawned_anvil.queue_free()
 	else:
 		spawned_anvil.hide_interact_prompt()
+	
+	pull_in_nearby_mana(mana_pull_range, delta)
 
 func check_distance_to_anvil() -> bool:
 	return (spawned_anvil.global_position - global_position).length() <= interact_distance
@@ -98,3 +103,13 @@ func get_closest_enemy_in_range(the_range):
 			closest_enemy_range = dist
 		
 	return closest_enemy
+
+func pull_in_nearby_mana(the_range, delta):
+	var mana_rocks = get_tree().get_nodes_in_group("mana_rocks")
+	for mana_rock in mana_rocks:
+		var dist = global_position.distance_to(mana_rock.global_position)
+		if dist <= mana_min_range:
+			# eat mana
+			mana_rock.queue_free()
+		elif dist <= the_range:
+			mana_rock.global_position = mana_rock.global_position.move_toward(global_position, mana_pull_speed * delta)
