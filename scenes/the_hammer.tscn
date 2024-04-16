@@ -1,64 +1,33 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvp4k4mja17t4"]
+[gd_scene load_steps=9 format=3 uid="uid://dvp4k4mja17t4"]
 
 [ext_resource type="Script" path="res://scripts/WeaponController.gd" id="1_ea1y5"]
 [ext_resource type="Texture2D" uid="uid://b86nqnqv7701p" path="res://sprites/kenney/tiny-dungeon/tile_0117.png" id="1_ekn4a"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_up0b7"]
-size = Vector2(10, 7)
+[sub_resource type="Curve" id="Curve_5fb63"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_1dsg0"]
+offsets = PackedFloat32Array(0.376543, 1)
+colors = PackedColorArray(0.529115, 0.681434, 0.694426, 1, 1, 1, 1, 1)
 
 [sub_resource type="Animation" id="Animation_h75og"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HammerSprite:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("HammerSprite:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_rwtgx"]
 resource_name = "swing"
-length = 0.25
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HammerSprite:position")
+tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.04, 0.1, 0.2, 0.25),
-"transitions": PackedFloat32Array(1, 1, -0.5, 1, 1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(-3.86374, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(20, 5), Vector2(0, 0), Vector2(-20, 5), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("HammerSprite:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.04, 0.1, 0.2, 0.25),
-"transitions": PackedFloat32Array(1, 1, -0.5, 1, 1),
-"update": 0,
-"values": [0.0, 0.523599, 0.0, -0.523599, 0.0]
+"values": [Vector2(30, 0), Vector2(-30, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_eh37b"]
@@ -67,19 +36,31 @@ _data = {
 "swing": SubResource("Animation_rwtgx")
 }
 
-[node name="TheHammer" type="Area2D"]
-z_index = 10
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_up0b7"]
+size = Vector2(10, 7)
+
+[node name="TheHammer" type="Node2D"]
 script = ExtResource("1_ea1y5")
+weapon_damage = 60
 
-[node name="HammerSprite" type="Sprite2D" parent="."]
-y_sort_enabled = true
-texture = ExtResource("1_ekn4a")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1.11957e-05, -2.5)
-shape = SubResource("RectangleShape2D_up0b7")
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 30, 0)
+width_curve = SubResource("Curve_5fb63")
+gradient = SubResource("Gradient_1dsg0")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../WeaponBody")
 libraries = {
 "": SubResource("AnimationLibrary_eh37b")
 }
+
+[node name="WeaponBody" type="Area2D" parent="."]
+z_index = 10
+
+[node name="HammerSprite" type="Sprite2D" parent="WeaponBody"]
+y_sort_enabled = true
+texture = ExtResource("1_ekn4a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponBody"]
+position = Vector2(-1.11957e-05, -2.5)
+shape = SubResource("RectangleShape2D_up0b7")

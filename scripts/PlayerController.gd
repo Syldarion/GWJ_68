@@ -84,7 +84,6 @@ func strike_enemy(enemy):
 	hammer_instance.global_position = enemy.global_position
 	hammer_instance.global_rotation = angle_to_enemy + deg_to_rad(90)
 	get_parent().add_child(hammer_instance)
-	enemy.damage_entity(20)
 	hammer_instance.swing_at_location(enemy.global_position)
 	time_since_last_swing = 0.0
 
