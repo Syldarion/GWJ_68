@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var player_speed = 40
+@export var base_speed = 40
 @export var throw_charge_buildup = 2
 @export var max_throw_charge = 500
 @export var interact_distance = 32
@@ -12,14 +12,27 @@ extends Node2D
 
 @onready var charge_bar = $ChargeBar as TextureProgressBar
 
+signal exp_gained(current, max, level)
+
 var anvil_scene = preload("res://scenes/the_anvil.tscn")
 var hammer_scene = preload("res://scenes/the_hammer.tscn")
+
+var current_exp = 0
+var exp_for_next_level = 100
+var current_level = 0
 
 var throw_charge = 0
 var holding_anvil = true
 var spawned_anvil = null
 
 var time_since_last_swing = 0.0
+
+var player_stats = {
+	"speed_mult": 1.0,
+	"hammer_damage": 60
+}
+
+var active_upgrades = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,8 +53,9 @@ func _process(delta):
 	if Input.is_action_pressed("MoveDown"): movement.y += 1.0
 	
 	movement = movement.normalized()
+	var speed = base_speed * player_stats.speed_mult
 	
-	translate(movement * player_speed * delta)
+	translate(movement * speed * delta)
 	
 	if time_since_last_swing >= swing_cooldown:
 		var closest_enemy = get_closest_enemy_in_range(attack_range)
@@ -109,7 +123,8 @@ func pull_in_nearby_mana(the_range, delta):
 	for mana_rock in mana_rocks:
 		var dist = global_position.distance_to(mana_rock.global_position)
 		if dist <= mana_min_range:
-			# eat mana
+			current_exp += 1
+			exp_gained.emit(current_exp, exp_for_next_level, current_level)
 			mana_rock.queue_free()
 		elif dist <= the_range:
 			mana_rock.global_position = mana_rock.global_position.move_toward(global_position, mana_pull_speed * delta)
