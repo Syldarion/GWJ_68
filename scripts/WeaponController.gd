@@ -1,10 +1,12 @@
 extends Node2D
 
 @export_category("Weapon Stats")
-@export var weapon_damage : int
+@export var base_weapon_damage : int
 
 @onready var weapon_body = $WeaponBody as Area2D
 @onready var animation_player = $AnimationPlayer as AnimationPlayer
+
+var damage_modifier
 
 
 # Called when the node enters the scene tree for the first time.
@@ -24,7 +26,7 @@ func swing_at_location(location):
 
 func _on_body_entered(body):
 	if body.is_in_group("enemies"):
-		body.damage_entity(weapon_damage)
+		body.damage_entity(base_weapon_damage + damage_modifier)
 
 
 func _on_animation_finished(anim_name):

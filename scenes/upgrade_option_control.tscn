@@ -13,69 +13,47 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -128.0
-offset_right = 128.0
-offset_bottom = 128.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(64, 64)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
 script = ExtResource("1_fay1n")
+FlareTexturePath = NodePath("UpgradeOptionControl/FlareTexture")
 
-[node name="FlareTexture" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(384, 384)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.25
-anchor_top = -0.25
-anchor_right = 1.25
-anchor_bottom = 1.25
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(192, 192)
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource("1_7vbvt")
-expand_mode = 1
-stretch_mode = 4
-metadata/_edit_use_anchors_ = true
-
-[node name="BackgroundRect" type="NinePatchRect" parent="."]
-self_modulate = Color(0.160784, 0.152941, 0.152941, 0.619608)
-custom_minimum_size = Vector2(96, 96)
+[node name="UpgradeOptionControl" type="NinePatchRect" parent="."]
+self_modulate = Color(0.568627, 0.572549, 0.611765, 0.501961)
+custom_minimum_size = Vector2(288, 480)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
+offset_left = -144.0
+offset_top = -240.0
+offset_right = 144.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 0
 texture = ExtResource("2_o57ic")
 patch_margin_left = 12
 patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
 
-[node name="BorderRect" type="NinePatchRect" parent="."]
-modulate = Color(0.580392, 0.584314, 0.666667, 1)
-custom_minimum_size = Vector2(96, 96)
+[node name="PanelFG" type="NinePatchRect" parent="UpgradeOptionControl"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_ff7ld")
@@ -84,19 +62,41 @@ patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
 
-[node name="IconTexture" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+[node name="FlareTexture" type="TextureRect" parent="UpgradeOptionControl"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 256.0
+offset_bottom = 256.0
+pivot_offset = Vector2(112, 112)
+mouse_filter = 2
+texture = ExtResource("1_7vbvt")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="IconTexture" type="TextureRect" parent="UpgradeOptionControl"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+offset_left = 112.0
+offset_top = 112.0
+offset_right = 176.0
+offset_bottom = 176.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(16, 16)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
 texture = ExtResource("3_pvtxa")
+
+[node name="UpgradeDescription" type="RichTextLabel" parent="UpgradeOptionControl"]
+layout_mode = 2
+offset_left = 16.0
+offset_top = 276.0
+offset_right = 272.0
+offset_bottom = 464.0
+size_flags_vertical = 3
+mouse_filter = 2
+text = "Description of the thing."
+scroll_active = false

@@ -18,9 +18,12 @@ func _process(delta):
 
 
 func spawn_wave_offscreen(spawn_data: SpawnWaveData):
+	var player_node = get_tree().get_first_node_in_group("player")
+	var min_angle = 0.0
+	var max_angle = 2 * PI
 	for i in range(spawn_data.enemy_count):
-		var rand_angle = randf_range(0.0, 2 * PI)
-		var loc_offscreen = Vector2(cos(rand_angle), sin(rand_angle)) * offscreen_spawn_distance
+		var rand_angle = randf_range(min_angle, max_angle)
+		var loc_offscreen = player_node.global_position + Vector2(cos(rand_angle), sin(rand_angle)) * offscreen_spawn_distance
 		spawn_enemy(spawn_data.enemy_name, loc_offscreen)
 
 

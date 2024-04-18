@@ -13,12 +13,14 @@ extends Node2D
 @onready var charge_bar = $ChargeBar as TextureProgressBar
 
 signal exp_gained(current, max, level)
+signal leveled_up(level)
+signal anvil_picked_up()
 
 var anvil_scene = preload("res://scenes/the_anvil.tscn")
 var hammer_scene = preload("res://scenes/the_hammer.tscn")
 
 var current_exp = 0
-var exp_for_next_level = 100
+var exp_for_next_level = 10
 var current_level = 0
 
 var throw_charge = 0
@@ -29,7 +31,10 @@ var time_since_last_swing = 0.0
 
 var player_stats = {
 	"speed_mult": 1.0,
-	"hammer_damage": 60
+	"hammer_damage_add": 0,
+	"hammer_range_mult": 1.0,
+	"hammer_speed_mult": 1.0,
+	"anvil_damage_add": 0
 }
 
 var active_upgrades = []
@@ -57,12 +62,15 @@ func _process(delta):
 	
 	translate(movement * speed * delta)
 	
-	if time_since_last_swing >= swing_cooldown:
-		var closest_enemy = get_closest_enemy_in_range(attack_range)
+	if time_since_last_swing >= swing_cooldown * (1 / player_stats.hammer_speed_mult):
+		var closest_enemy = get_closest_enemy_in_range(attack_range * (1 / player_stats.hammer_range_mult))
 		if closest_enemy:
 			strike_enemy(closest_enemy)
 		
 	time_since_last_swing += delta
+	
+	if Input.is_action_just_pressed("DEBUG_AddExp"):
+		add_exp(10)
 	
 	if holding_anvil:
 		if Input.is_action_pressed("Throw"):
@@ -78,8 +86,7 @@ func _process(delta):
 	elif check_distance_to_anvil():
 		spawned_anvil.show_interact_prompt()
 		if Input.is_action_just_pressed("Interact"):
-			holding_anvil = true
-			spawned_anvil.queue_free()
+			pick_up_anvil()
 	else:
 		spawned_anvil.hide_interact_prompt()
 	
@@ -87,6 +94,11 @@ func _process(delta):
 
 func check_distance_to_anvil() -> bool:
 	return (spawned_anvil.global_position - global_position).length() <= interact_distance
+
+func pick_up_anvil():
+	holding_anvil = true
+	spawned_anvil.queue_free()
+	anvil_picked_up.emit()
 
 func throw_anvil(strength, direction):
 	var instance = anvil_scene.instantiate()
@@ -103,6 +115,7 @@ func strike_enemy(enemy):
 	hammer_instance.global_position = enemy.global_position
 	hammer_instance.global_rotation = angle_to_enemy + deg_to_rad(90)
 	get_parent().add_child(hammer_instance)
+	hammer_instance.damage_modifier = player_stats.hammer_damage_add
 	hammer_instance.swing_at_location(enemy.global_position)
 	time_since_last_swing = 0.0
 
@@ -123,8 +136,28 @@ func pull_in_nearby_mana(the_range, delta):
 	for mana_rock in mana_rocks:
 		var dist = global_position.distance_to(mana_rock.global_position)
 		if dist <= mana_min_range:
-			current_exp += 1
-			exp_gained.emit(current_exp, exp_for_next_level, current_level)
+			add_exp(1)
 			mana_rock.queue_free()
 		elif dist <= the_range:
 			mana_rock.global_position = mana_rock.global_position.move_toward(global_position, mana_pull_speed * delta)
+
+func add_exp(amount):
+	current_exp += amount
+	if current_exp >= exp_for_next_level:
+		current_level += 1
+		current_exp -= exp_for_next_level
+		exp_for_next_level = exp_for_level(current_level + 1)
+		leveled_up.emit(current_level)
+	exp_gained.emit(current_exp, exp_for_next_level, current_level)
+
+func exp_for_level(level):
+	# change the first number for base exp
+	# change the last number for growth
+	return 10 + ((level - 1) * (level - 1)) * 4
+
+
+func add_upgrade(upgrade_name, upgrade_data):
+	print_debug("Added upgrade " + upgrade_name)
+	active_upgrades.append(upgrade_name)
+	for effect_name in upgrade_data.effect:
+		player_stats[effect_name] += upgrade_data.effect[effect_name]
