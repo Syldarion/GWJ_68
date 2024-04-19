@@ -3,9 +3,10 @@ extends Node2D
 @export var upgrade_screen_scene : PackedScene
 @export var hammer_minigame_scene : PackedScene
 
+@export var spawn_data : Array[SpawnWaveData] = []
+
 var the_smith
-var ui_timer : Label
-var ui_exp_bar : TextureProgressBar
+var game_ui_controller
 var entity_spawner
 var upgrade_screen
 var game_camera
@@ -14,14 +15,21 @@ var spawned_upgrade_anvil
 var available_upgrades = 0
 var game_time_seconds = 0
 
+var current_wave = 0
+var time_between_waves = 10
+var time_since_wave = 0
+
+var kills = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	the_smith = find_child("TheSmith")
 	the_smith.exp_gained.connect(_on_player_gained_exp)
 	the_smith.leveled_up.connect(_on_player_leveled_up)
 	the_smith.anvil_picked_up.connect(_on_player_picked_up_anvil)
-	ui_timer = find_child("GameTimerLabel")
-	ui_exp_bar = find_child("EXPBar")
+	game_ui_controller = $GameUI
+	game_ui_controller.set_timer_text("00:00")
+	game_ui_controller.set_kill_count_text("0")
 	entity_spawner = find_child("EntitySpawner")
 	game_camera = find_child("FocusCamera")
 
@@ -29,7 +37,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	game_time_seconds += delta
-	ui_timer.text = format_time(game_time_seconds)
+	game_ui_controller.set_timer_text(format_time(game_time_seconds))
+	
+	time_since_wave += delta
+	if time_since_wave >= time_between_waves:
+		spawn_new_wave()
 
 
 func format_time(seconds):
@@ -39,8 +51,7 @@ func format_time(seconds):
 
 
 func _on_player_gained_exp(current, max, level):
-	ui_exp_bar.max_value = max
-	ui_exp_bar.value = current
+	game_ui_controller.set_exp_bar_values(0, max, current)
 
 
 func _on_player_leveled_up(level):
@@ -137,3 +148,19 @@ func get_available_upgrades(current_upgrades):
 		if is_upgrade_available(upgrade_name, current_upgrades):
 			available.append(upgrade_name)
 	return available
+
+
+func spawn_new_wave():
+	var enemy_data = spawn_data[current_wave % spawn_data.size()]
+	var spawned_enemies = entity_spawner.spawn_wave_offscreen(enemy_data)
+	
+	for enemy in spawned_enemies:
+		enemy.enemy_died.connect(_on_enemy_died)
+	
+	current_wave += 1
+	time_since_wave = 0
+
+
+func _on_enemy_died(death_loc):
+	kills += 1
+	game_ui_controller.set_kill_count_text(str(kills))

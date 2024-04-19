@@ -21,15 +21,18 @@ func spawn_wave_offscreen(spawn_data: SpawnWaveData):
 	var player_node = get_tree().get_first_node_in_group("player")
 	var min_angle = 0.0
 	var max_angle = 2 * PI
+	var enemies = []
 	for i in range(spawn_data.enemy_count):
 		var rand_angle = randf_range(min_angle, max_angle)
 		var loc_offscreen = player_node.global_position + Vector2(cos(rand_angle), sin(rand_angle)) * offscreen_spawn_distance
-		spawn_enemy(spawn_data.enemy_name, loc_offscreen)
+		enemies.append(spawn_enemy(spawn_data.enemy_name, loc_offscreen))
+	return enemies
 
 
 func spawn_enemy(enemy_name, spawn_loc):
 	var enemy = spawn_entity(enemy_name, spawn_loc) as EnemyController
 	enemy.enemy_died.connect(_on_enemy_died)
+	return enemy
 
 
 func _on_enemy_died(death_loc):
