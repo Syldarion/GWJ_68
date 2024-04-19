@@ -4,6 +4,7 @@ extends Node2D
 @export var hammer_minigame_scene : PackedScene
 
 var the_smith
+var ui_timer : Label
 var ui_exp_bar : TextureProgressBar
 var entity_spawner
 var upgrade_screen
@@ -11,6 +12,7 @@ var game_camera
 var spawned_upgrade_anvil
 
 var available_upgrades = 0
+var game_time_seconds = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,6 +20,7 @@ func _ready():
 	the_smith.exp_gained.connect(_on_player_gained_exp)
 	the_smith.leveled_up.connect(_on_player_leveled_up)
 	the_smith.anvil_picked_up.connect(_on_player_picked_up_anvil)
+	ui_timer = find_child("GameTimerLabel")
 	ui_exp_bar = find_child("EXPBar")
 	entity_spawner = find_child("EntitySpawner")
 	game_camera = find_child("FocusCamera")
@@ -25,7 +28,14 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	game_time_seconds += delta
+	ui_timer.text = format_time(game_time_seconds)
+
+
+func format_time(seconds):
+	var minutes = int(seconds / 60)
+	var remaining_seconds = int(seconds) % 60
+	return "%02d:%02d" % [minutes, remaining_seconds]
 
 
 func _on_player_gained_exp(current, max, level):
