@@ -161,3 +161,4 @@ func add_upgrade(upgrade_name, upgrade_data):
 	active_upgrades.append(upgrade_name)
 	for effect_name in upgrade_data.effect:
 		player_stats[effect_name] += upgrade_data.effect[effect_name]
+	print_debug(player_stats)

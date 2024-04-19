@@ -1,12 +1,14 @@
 extends Node2D
 
 @export var upgrade_screen_scene : PackedScene
+@export var hammer_minigame_scene : PackedScene
 
 var the_smith
 var ui_exp_bar : TextureProgressBar
 var entity_spawner
 var upgrade_screen
 var game_camera
+var spawned_upgrade_anvil
 
 var available_upgrades = 0
 
@@ -38,7 +40,7 @@ func _on_player_leveled_up(level):
 
 func _on_player_picked_up_anvil():
 	if available_upgrades > 0:
-		var upgrade_anvil = entity_spawner.spawn_entity("anvil", the_smith.global_position + Vector2.RIGHT * 16)
+		spawned_upgrade_anvil = entity_spawner.spawn_entity("anvil", the_smith.global_position + Vector2.RIGHT * 16)
 		game_camera.enter_focus_zoom()
 		show_new_upgrade()
 		get_tree().paused = true
@@ -49,7 +51,7 @@ func show_new_upgrade():
 	add_child(new_upgrade_screen)
 	var upgrade_choices = choose_from_available_upgrades(3)
 	for choice in upgrade_choices:
-		new_upgrade_screen.add_option_to_list(choice, UpgradeLibary.UPGRADES[choice])
+		new_upgrade_screen.add_option_to_list(choice, UpgradeLibrary.UPGRADES[choice])
 	new_upgrade_screen.upgrade_selected.connect(_on_upgrade_screen_selected.bind(new_upgrade_screen))
 
 
@@ -62,18 +64,57 @@ func choose_from_available_upgrades(count):
 func _on_upgrade_screen_selected(upgrade_name, upgrade_screen):
 	available_upgrades -= 1
 	print_debug(available_upgrades)
-	the_smith.add_upgrade(upgrade_name, UpgradeLibary.UPGRADES[upgrade_name])
+	# the_smith.add_upgrade(upgrade_name, UpgradeLibrary.UPGRADES[upgrade_name])
 	upgrade_screen.queue_free()
-	if available_upgrades > 0:
-		show_new_upgrade()
-	else:
-		get_tree().paused = false
-		game_camera.leave_focus_zoom()
+	run_minigame(upgrade_name)
+	get_tree().paused = false
+
+
+func run_minigame(upgrade_name):
+	var new_hammer_minigame = hammer_minigame_scene.instantiate()
+	add_child(new_hammer_minigame)
+	new_hammer_minigame.global_position = the_smith.global_position
+	new_hammer_minigame.hammer_struck.connect(_on_minigame_hammer_strike)
+	new_hammer_minigame.minigame_done.connect(finish_minigame.bind(new_hammer_minigame, upgrade_name))
+
+
+func _on_minigame_hammer_strike(effect_added):
+	print_debug(effect_added)
+
+
+func deep_copy_dictionary(original):
+	var copy = {}
+	for key in original.keys():
+		var value = original[key]
+		if typeof(value) == TYPE_DICTIONARY:
+			copy[key] = deep_copy_dictionary(value)
+		else:
+			copy[key] = value
+	return copy
+
+
+func finish_minigame(minigame_value, minigame_screen, upgrade_name):
+	print_debug(minigame_value)
+	
+	var upgrade_data = deep_copy_dictionary(UpgradeLibrary.UPGRADES[upgrade_name])
+	if upgrade_data.has("effect") and typeof(upgrade_data["effect"]) == TYPE_DICTIONARY:
+		for key in upgrade_data["effect"].keys():
+			if typeof(upgrade_data["effect"][key]) in [TYPE_FLOAT, TYPE_INT]:
+				upgrade_data["effect"][key] *= (1.0 + minigame_value)
+			else:
+				print_debug("Non numerical value encountered...")
+	
+	the_smith.add_upgrade(upgrade_name, upgrade_data)
+	
+	spawned_upgrade_anvil.queue_free()
+	game_camera.leave_focus_zoom()
+	minigame_screen.queue_free()
+
 
 func is_upgrade_available(upgrade_name, current_upgrades):
 	if upgrade_name in current_upgrades:
 		return false
-	var upgrade = UpgradeLibary.UPGRADES[upgrade_name]
+	var upgrade = UpgradeLibrary.UPGRADES[upgrade_name]
 	for prerequisite in upgrade.prerequisites:
 		if prerequisite not in current_upgrades:
 			return false
@@ -82,7 +123,7 @@ func is_upgrade_available(upgrade_name, current_upgrades):
 
 func get_available_upgrades(current_upgrades):
 	var available = []
-	for upgrade_name in UpgradeLibary.UPGRADES:
+	for upgrade_name in UpgradeLibrary.UPGRADES:
 		if is_upgrade_available(upgrade_name, current_upgrades):
 			available.append(upgrade_name)
 	return available
