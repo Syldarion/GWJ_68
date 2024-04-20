@@ -34,8 +34,14 @@ var player_stats = {
 	"hammer_damage_add": 0,
 	"hammer_range_mult": 1.0,
 	"hammer_speed_mult": 1.0,
-	"anvil_damage_add": 0
+	"anvil_damage_add": 0,
+	"anvil_shockwave_damage_add": 0,
+	"health": 80,
+	"dodge_chance": 0,
+	"exp_mult": 1.0
 }
+
+var current_health
 
 var active_upgrades = []
 
@@ -47,6 +53,8 @@ func _ready():
 	charge_bar.max_value = max_throw_charge
 	charge_bar.value = 0
 	charge_bar.visible = false
+	
+	current_health = player_stats.health
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -70,7 +78,7 @@ func _process(delta):
 	time_since_last_swing += delta
 	
 	if Input.is_action_just_pressed("DEBUG_AddExp"):
-		add_exp(10)
+		add_exp(100)
 	
 	if holding_anvil:
 		if Input.is_action_pressed("Throw"):
@@ -119,6 +127,16 @@ func strike_enemy(enemy):
 	hammer_instance.swing_at_location(enemy.global_position)
 	time_since_last_swing = 0.0
 
+
+func take_damage(enemy, amount):
+	# called when an enemy goes to hit the player
+	# probably not the best way to do it
+	if randf() < player_stats.dodge_chance:
+		# dodged
+		return
+	print("%s dealt %d" % [enemy.name, amount])
+
+
 func get_closest_enemy_in_range(the_range):
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	var closest_enemy = null
@@ -136,13 +154,13 @@ func pull_in_nearby_mana(the_range, delta):
 	for mana_rock in mana_rocks:
 		var dist = global_position.distance_to(mana_rock.global_position)
 		if dist <= mana_min_range:
-			add_exp(1)
+			add_exp(100)
 			mana_rock.queue_free()
 		elif dist <= the_range:
 			mana_rock.global_position = mana_rock.global_position.move_toward(global_position, mana_pull_speed * delta)
 
 func add_exp(amount):
-	current_exp += amount
+	current_exp += int(amount * player_stats.exp_mult)
 	if current_exp >= exp_for_next_level:
 		current_level += 1
 		current_exp -= exp_for_next_level
@@ -150,10 +168,11 @@ func add_exp(amount):
 		leveled_up.emit(current_level)
 	exp_gained.emit(current_exp, exp_for_next_level, current_level)
 
+
 func exp_for_level(level):
 	# change the first number for base exp
 	# change the last number for growth
-	return 10 + ((level - 1) * (level - 1)) * 4
+	return 1000 + ((level - 1) * (level - 1)) * 400
 
 
 func add_upgrade(upgrade_name, upgrade_data):

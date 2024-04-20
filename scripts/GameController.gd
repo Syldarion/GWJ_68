@@ -101,6 +101,10 @@ func run_minigame(upgrade_name):
 
 func _on_minigame_hammer_strike(effect_added):
 	print_debug(effect_added)
+	var shockwave = entity_spawner.spawn_entity("shockwave", spawned_upgrade_anvil.global_position)
+	shockwave.z_index = -1
+	shockwave.shockwave(64.0, 256.0, 10, 200)
+	game_camera.add_trauma(0.2)
 
 
 func deep_copy_dictionary(original):

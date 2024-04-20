@@ -3,6 +3,9 @@ extends CharacterBody2D
 
 @export var move_speed : float = 20.0
 @export var max_health : int = 100
+@export var attack_range : float = 8
+@export var attack_cooldown : float = 2.0
+@export var attack_damage : int = 10
 
 @onready var health_bar = $HealthBar as TextureProgressBar
 
@@ -10,6 +13,11 @@ signal enemy_died(location)
 
 var current_health
 var player_target
+
+var time_since_last_attack = 0
+
+var knockback_duration = 0.25
+var knockback_timer = 0.0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -27,14 +35,25 @@ func _ready():
 
 
 func _physics_process(delta):
-	if player_target:
+	if knockback_timer > 0:
+		knockback_timer -= delta
+	elif player_target:
 		var movement_dir = (player_target.global_position - global_position).normalized()
-		move_and_collide(movement_dir * move_speed * delta)
+		velocity = movement_dir * move_speed
+	move_and_collide(velocity * delta)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	var distance_to_player = global_position.distance_to(player_target.global_position)
+	time_since_last_attack += delta
+	if time_since_last_attack > attack_cooldown and distance_to_player <= attack_range:
+		attack_player()
+
+
+func attack_player():
+	time_since_last_attack = 0
+	player_target.take_damage(self, attack_damage)
 
 
 func damage_entity(damage_amount):
@@ -46,4 +65,5 @@ func damage_entity(damage_amount):
 		queue_free()
 
 func knockback_entity(knock_velocity):
-	global_position += knock_velocity
+	velocity = knock_velocity
+	knockback_timer = knockback_duration

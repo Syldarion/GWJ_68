@@ -3,10 +3,7 @@ extends Node2D
 signal hammer_struck(strike_value)
 signal minigame_done(final_value)
 
-var no_effect_arc_start = 0
-var no_to_med_effect_transition = 45
-var med_to_sweet_spot_transition = 75
-var sweet_spot_arc_end = 90
+var sweet_spot_size = 15
 
 var arc_radius = 32
 
@@ -30,6 +27,9 @@ var no_effect_value_add = 0.0
 var minigame_value = 0
 var max_strikes = 3
 var strike_count = 0
+
+var start_rad = deg_to_rad(0)
+var end_rad = deg_to_rad(90)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -57,14 +57,10 @@ func _process(delta):
 
 
 func _draw():
-	# void draw_arc(center: Vector2, radius: float, start_angle: float, end_angle: float, point_count: int, color: Color, width: float = -1.0, antialiased: bool = false)
-	
 	# draw the no effect zome
-	draw_arc(Vector2.ZERO, arc_radius, deg_to_rad(no_effect_arc_start), deg_to_rad(no_to_med_effect_transition), 8, no_effect_color, 4)
-	# draw the med effect zone
-	draw_arc(Vector2.ZERO, arc_radius, deg_to_rad(no_to_med_effect_transition), deg_to_rad(med_to_sweet_spot_transition), 8, med_effect_color, 4)
+	draw_arc(Vector2.ZERO, arc_radius, start_rad, end_rad - deg_to_rad(sweet_spot_size), 8, no_effect_color, 4)
 	# draw the sweet spot
-	draw_arc(Vector2.ZERO, arc_radius, deg_to_rad(med_to_sweet_spot_transition), deg_to_rad(sweet_spot_arc_end), 8, sweet_spot_color, 4)
+	draw_arc(Vector2.ZERO, arc_radius, end_rad - deg_to_rad(sweet_spot_size), end_rad, 8, sweet_spot_color, 4)
 	
 	# draw_circle(Vector2(cos(deg_to_rad(pointer_position)), sin(deg_to_rad(pointer_position))) * pointer_radius, 2.0, Color.WHITE)
 	var angle = deg_to_rad(pointer_position)
@@ -74,14 +70,12 @@ func _draw():
 
 
 func hit_anvil():
-	if pointer_position > med_to_sweet_spot_transition:
+	$AudioStreamPlayer.play()
+	
+	if pointer_position > (90 - sweet_spot_size):
 		# sweet spot hit
 		minigame_value += sweet_spot_value_add
 		hammer_struck.emit(sweet_spot_value_add)
-	elif pointer_position > no_to_med_effect_transition:
-		# med effect hit
-		minigame_value += med_effect_value_add
-		hammer_struck.emit(med_effect_value_add)
 	else:
 		# no effect hit
 		minigame_value += no_effect_value_add

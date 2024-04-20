@@ -9,6 +9,12 @@ extends Camera2D
 @export var FocusZoom : float = 6.0
 @export var ZoomTime : float = 3.0
 
+@export var ShakeDecay : float = 0.8
+@export var MaxShakeOffset : Vector2
+
+var shake_trauma = 0.0
+var shake_trauma_power = 2
+
 var focus_mode = false
 var target : Node
 var zoom_tween = null
@@ -58,3 +64,17 @@ func _process(delta):
 		global_position = global_position.lerp(desired_pos, SnapFollowSpeed * delta)
 	else:
 		global_position = global_position.lerp(target.global_position, FollowSpeed * delta)
+	
+	if shake_trauma:
+		shake_trauma = max(shake_trauma - ShakeDecay * delta, 0.0)
+		shake()
+
+
+func add_trauma(amount):
+	shake_trauma = min(shake_trauma + amount, 1.0)
+
+
+func shake():
+	var amount = pow(shake_trauma, shake_trauma_power)
+	offset.x = MaxShakeOffset.x * amount * randf_range(-1.0, 1.0)
+	offset.y = MaxShakeOffset.y * amount * randf_range(-1.0, 1.0)

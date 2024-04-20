@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://crlkytgdorv4t"]
+
+[ext_resource type="Script" path="res://scripts/ShockwaveEffect.gd" id="1_rntvi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w8xg2"]
+radius = 32.0
+
+[node name="ShockwaveEffect" type="Node2D"]
+scale = Vector2(1, 0.5)
+script = ExtResource("1_rntvi")
+
+[node name="ShockwaveArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShockwaveArea"]
+shape = SubResource("CircleShape2D_w8xg2")
