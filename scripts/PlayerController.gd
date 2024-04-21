@@ -15,6 +15,7 @@ extends Node2D
 signal exp_gained(current, max, level)
 signal leveled_up(level)
 signal anvil_picked_up()
+signal health_changed(current, max)
 
 var anvil_scene = preload("res://scenes/the_anvil.tscn")
 var hammer_scene = preload("res://scenes/the_hammer.tscn")
@@ -34,8 +35,8 @@ var player_stats = {
 	"hammer_damage_add": 0,
 	"hammer_range_mult": 1.0,
 	"hammer_speed_mult": 1.0,
-	"anvil_damage_add": 0,
-	"anvil_shockwave_damage_add": 0,
+	"anvil_damage": 100,
+	"anvil_shockwave_damage": 50,
 	"health": 80,
 	"dodge_chance": 0,
 	"exp_mult": 1.0
@@ -54,7 +55,9 @@ func _ready():
 	charge_bar.value = 0
 	charge_bar.visible = false
 	
-	current_health = player_stats.health
+	exp_for_next_level = exp_for_level(1)
+	
+	set_health(player_stats.health)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -111,6 +114,7 @@ func pick_up_anvil():
 func throw_anvil(strength, direction):
 	var instance = anvil_scene.instantiate()
 	instance.global_transform = global_transform
+	instance.set_damage(player_stats.anvil_damage)
 	get_parent().add_child(instance)
 	var impulse = direction.normalized() * strength
 	instance.apply_central_impulse(impulse)
@@ -128,6 +132,11 @@ func strike_enemy(enemy):
 	time_since_last_swing = 0.0
 
 
+func set_health(new_health):
+	current_health = new_health
+	health_changed.emit(current_health, player_stats.health)
+
+
 func take_damage(enemy, amount):
 	# called when an enemy goes to hit the player
 	# probably not the best way to do it
@@ -135,6 +144,14 @@ func take_damage(enemy, amount):
 		# dodged
 		return
 	print("%s dealt %d" % [enemy.name, amount])
+	set_health(current_health - amount)
+
+
+func damage_entity(amount):
+	if randf() < player_stats.dodge_chance:
+		# dodged
+		return
+	set_health(current_health - amount)
 
 
 func get_closest_enemy_in_range(the_range):
@@ -172,7 +189,7 @@ func add_exp(amount):
 func exp_for_level(level):
 	# change the first number for base exp
 	# change the last number for growth
-	return 1000 + ((level - 1) * (level - 1)) * 400
+	return 1000 + ((level - 1) * (level - 1)) * 200
 
 
 func add_upgrade(upgrade_name, upgrade_data):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cv7hl548sos71"]
+[gd_scene load_steps=13 format=3 uid="uid://cv7hl548sos71"]
 
 [ext_resource type="Script" path="res://scripts/GameController.gd" id="1_gyq0k"]
 [ext_resource type="PackedScene" uid="uid://dmrxjjmx1blrt" path="res://scenes/battlefield.tscn" id="1_olhss"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://ywa5yvjr47wq" path="res://scenes/hammer_arc_mini_game.tscn" id="3_brusl"]
 [ext_resource type="PackedScene" uid="uid://dpjklxaf4p0d" path="res://scenes/upgrade_screen.tscn" id="4_8oncr"]
 [ext_resource type="Script" path="res://scripts/SpawnWaveData.gd" id="4_msk22"]
+[ext_resource type="AudioStream" uid="uid://dhl0uk3i2uuuj" path="res://sounds/Adventure Meme.mp3" id="7_qyod8"]
+[ext_resource type="AudioStream" uid="uid://dttohqipld8g" path="res://sounds/bing1.wav" id="8_o8r17"]
 
 [sub_resource type="Resource" id="Resource_m0wd4"]
 script = ExtResource("4_msk22")
@@ -40,3 +42,13 @@ spawn_data = Array[ExtResource("4_msk22")]([SubResource("Resource_m0wd4"), SubRe
 [node name="Battlefield" parent="." instance=ExtResource("1_olhss")]
 
 [node name="GameUI" parent="." instance=ExtResource("2_ab60m")]
+
+[node name="AdventureMusicPlayer" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("7_qyod8")
+volume_db = -20.0
+autoplay = true
+
+[node name="AnvilStrikePlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_o8r17")
+volume_db = -10.0

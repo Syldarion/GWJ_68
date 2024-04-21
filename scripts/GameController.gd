@@ -17,7 +17,7 @@ var game_time_seconds = 0
 
 var current_wave = 0
 var time_between_waves = 10
-var time_since_wave = 0
+var time_since_wave = 10
 
 var kills = 0
 
@@ -27,11 +27,14 @@ func _ready():
 	the_smith.exp_gained.connect(_on_player_gained_exp)
 	the_smith.leveled_up.connect(_on_player_leveled_up)
 	the_smith.anvil_picked_up.connect(_on_player_picked_up_anvil)
+	the_smith.health_changed.connect(_on_player_health_changed)
 	game_ui_controller = $GameUI
 	game_ui_controller.set_timer_text("00:00")
 	game_ui_controller.set_kill_count_text("0")
 	entity_spawner = find_child("EntitySpawner")
 	game_camera = find_child("FocusCamera")
+	
+	_on_player_health_changed(the_smith.current_health, the_smith.player_stats.health)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -51,7 +54,11 @@ func format_time(seconds):
 
 
 func _on_player_gained_exp(current, max, level):
-	game_ui_controller.set_exp_bar_values(0, max, current)
+	game_ui_controller.set_exp_bar_values(0, max, current, level)
+
+
+func _on_player_health_changed(current, max):
+	game_ui_controller.set_hp_bar_values(0, max, current)
 
 
 func _on_player_leveled_up(level):
@@ -103,8 +110,9 @@ func _on_minigame_hammer_strike(effect_added):
 	print_debug(effect_added)
 	var shockwave = entity_spawner.spawn_entity("shockwave", spawned_upgrade_anvil.global_position)
 	shockwave.z_index = -1
-	shockwave.shockwave(64.0, 256.0, 10, 200)
+	shockwave.shockwave(64.0, 256.0, the_smith.player_stats["anvil_shockwave_damage"], 200)
 	game_camera.add_trauma(0.2)
+	$AnvilStrikePlayer.play()
 
 
 func deep_copy_dictionary(original):
@@ -159,6 +167,8 @@ func spawn_new_wave():
 	var spawned_enemies = entity_spawner.spawn_wave_offscreen(enemy_data)
 	
 	for enemy in spawned_enemies:
+		var new_health = enemy.max_health * (the_smith.current_level + 1) * 0.75
+		enemy.set_health(new_health, new_health)
 		enemy.enemy_died.connect(_on_enemy_died)
 	
 	current_wave += 1

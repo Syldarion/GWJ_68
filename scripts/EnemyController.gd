@@ -6,6 +6,7 @@ extends CharacterBody2D
 @export var attack_range : float = 8
 @export var attack_cooldown : float = 2.0
 @export var attack_damage : int = 10
+@export var attack_scene : PackedScene
 
 @onready var health_bar = $HealthBar as TextureProgressBar
 
@@ -34,6 +35,15 @@ func _ready():
 	current_health = max_health
 
 
+func set_health(current, max_hp):
+	max_health = max_hp
+	current_health = current
+	
+	health_bar.min_value = 0
+	health_bar.max_value = max_health
+	health_bar.value = current_health
+
+
 func _physics_process(delta):
 	if knockback_timer > 0:
 		knockback_timer -= delta
@@ -53,10 +63,15 @@ func _process(delta):
 
 func attack_player():
 	time_since_last_attack = 0
-	player_target.take_damage(self, attack_damage)
+	var new_attack = attack_scene.instantiate()
+	add_child(new_attack)
+	var attack_target = player_target.global_position + Vector2.UP * 8
+	new_attack.global_rotation = (attack_target - global_position).angle() + deg_to_rad(90)
+	new_attack.swing_at_location(attack_target)
 
 
 func damage_entity(damage_amount):
+	
 	current_health = max(current_health - damage_amount, 0)
 	health_bar.value = current_health
 	health_bar.visible = true

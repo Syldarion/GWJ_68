@@ -5,19 +5,19 @@ extends Object
 const UPGRADES = {
 	"Hammer_Damage1": {
 		"description": "Increase the hammer's attack by 10.",
-		"effect": {"hammer_damage_add": 10},
+		"effect": {"hammer_damage_add": 30},
 		"icon": "res://sprites/kenney/tiny-dungeon/tile_0117_silhouette.png",
 		"prerequisites": []
 	},
 	"Hammer_Damage2": {
 		"description": "Increase the hammer's attack by 15.",
-		"effect": {"hammer_damage_add": 15},
+		"effect": {"hammer_damage_add": 45},
 		"icon": "res://sprites/kenney/tiny-dungeon/tile_0117_silhouette.png",
 		"prerequisites": ["Hammer_Damage1"]
 	},
 	"Hammer_Damage3": {
 		"description": "Increase the hammer's attack by 20.",
-		"effect": {"hammer_damage_add": 20},
+		"effect": {"hammer_damage_add": 60},
 		"icon": "res://sprites/kenney/tiny-dungeon/tile_0117_silhouette.png",
 		"prerequisites": ["Hammer_Damage2"]
 	},
@@ -59,13 +59,13 @@ const UPGRADES = {
 	},
 	"Anvil_Damage1": {
 		"description": "Increase the anvil's damage by 10.",
-		"effect": {"anvil_damage_add": 10},
+		"effect": {"anvil_damage": 50},
 		"icon": "res://sprites/kenney/tiny-dungeon/tile_0074_silhouette.png",
 		"prerequisites": []
 	},
 	"Anvil_ShockwaveDamage1": {
 		"description": "Increase the anvil's shockwave damage by 10.",
-		"effect": {"anvil_shockwave_damage_add": 10},
+		"effect": {"anvil_shockwave_damage": 50},
 		"icon": "res://sprites/kenney/tiny-dungeon/tile_0074_silhouette.png",
 		"prerequisites": []
 	},

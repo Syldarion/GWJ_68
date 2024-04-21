@@ -70,8 +70,6 @@ func _draw():
 
 
 func hit_anvil():
-	$AudioStreamPlayer.play()
-	
 	if pointer_position > (90 - sweet_spot_size):
 		# sweet spot hit
 		minigame_value += sweet_spot_value_add

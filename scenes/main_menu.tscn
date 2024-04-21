@@ -1,0 +1,86 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4tb8qaqofneu"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_gyncc"]
+[ext_resource type="PackedScene" uid="uid://cv7hl548sos71" path="res://scenes/game_controller.tscn" id="2_647u5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_r2f3x"]
+font_size = 128
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.501961)
+shadow_offset = Vector2(2, 2)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gyncc")
+game_scene = ExtResource("2_647u5")
+
+[node name="MenuButtons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -294.0
+offset_right = 96.0
+offset_bottom = -103.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="StartGameButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Start Game"
+
+[node name="HowToPlayButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "How to Play"
+
+[node name="SettingsButton" type="Button" parent="MenuButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Settings"
+
+[node name="CenterContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 573.0
+grow_horizontal = 2
+
+[node name="RichTextLabel" type="Label" parent="CenterContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "MANAFORGE"
+label_settings = SubResource("LabelSettings_r2f3x")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/RichTextLabel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -166.5
+offset_top = -216.0
+offset_right = 166.5
+offset_bottom = -193.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "(sure hope i come back to finish this menu)"
+
+[connection signal="pressed" from="MenuButtons/StartGameButton" to="." method="_on_start_game_button_pressed"]

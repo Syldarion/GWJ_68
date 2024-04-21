@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dvp4k4mja17t4"]
+[gd_scene load_steps=8 format=3 uid="uid://c5oksfyq84fjq"]
 
-[ext_resource type="Script" path="res://scripts/WeaponController.gd" id="1_ea1y5"]
-[ext_resource type="Texture2D" uid="uid://b86nqnqv7701p" path="res://sprites/kenney/tiny-dungeon/tile_0117.png" id="1_ekn4a"]
+[ext_resource type="Script" path="res://scripts/WeaponController.gd" id="1_33pjv"]
+[ext_resource type="Texture2D" uid="uid://8obqdp6jxctj" path="res://sprites/kenney/tiny-dungeon/tile_0103.png" id="2_1gs8d"]
 
 [sub_resource type="Curve" id="Curve_5fb63"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -11,12 +11,9 @@ point_count = 2
 offsets = PackedFloat32Array(0.376543, 1)
 colors = PackedColorArray(0.529115, 0.681434, 0.694426, 1, 1, 1, 1, 1)
 
-[sub_resource type="Animation" id="Animation_h75og"]
-length = 0.001
-
-[sub_resource type="Animation" id="Animation_rwtgx"]
-resource_name = "swing"
-length = 0.2
+[sub_resource type="Animation" id="Animation_kxc63"]
+resource_name = "stab"
+length = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -24,28 +21,28 @@ tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(-3.86374, 1),
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(30, 0), Vector2(-30, 0)]
+"values": [Vector2(0, 0), Vector2(0, -8)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_eh37b"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fv7dj"]
 _data = {
-"RESET": SubResource("Animation_h75og"),
-"swing": SubResource("Animation_rwtgx")
+"stab": SubResource("Animation_kxc63")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_up0b7"]
 size = Vector2(6, 8)
 
-[node name="TheHammer" type="Node2D"]
-script = ExtResource("1_ea1y5")
-base_weapon_damage = 60
-harm_group = "enemies"
-strike_anim_name = "swing"
+[node name="TheDagger" type="Node2D"]
+script = ExtResource("1_33pjv")
+base_weapon_damage = 10
+harm_group = "player"
+strike_anim_name = "stab"
 
 [node name="Line2D" type="Line2D" parent="."]
+visible = false
 points = PackedVector2Array(0, 0, 30, 0)
 width_curve = SubResource("Curve_5fb63")
 gradient = SubResource("Gradient_1dsg0")
@@ -53,16 +50,17 @@ gradient = SubResource("Gradient_1dsg0")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../WeaponBody")
 libraries = {
-"": SubResource("AnimationLibrary_eh37b")
+"": SubResource("AnimationLibrary_fv7dj")
 }
 
 [node name="WeaponBody" type="Area2D" parent="."]
 z_index = 10
+position = Vector2(0, -8)
 
 [node name="HammerSprite" type="Sprite2D" parent="WeaponBody"]
 y_sort_enabled = true
-texture = ExtResource("1_ekn4a")
+texture = ExtResource("2_1gs8d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponBody"]
-position = Vector2(-1.11957e-05, -2.5)
+position = Vector2(1.19209e-07, -2)
 shape = SubResource("RectangleShape2D_up0b7")

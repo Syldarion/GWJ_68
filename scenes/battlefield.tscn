@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dmrxjjmx1blrt"]
+[gd_scene load_steps=14 format=3 uid="uid://dmrxjjmx1blrt"]
 
 [ext_resource type="Script" path="res://scenes/battlefield.gd" id="1_1luqo"]
 [ext_resource type="Texture2D" uid="uid://dwadgimq7g8s1" path="res://sprites/kenney/tiny-dungeon/tile_0086.png" id="2_giyxn"]
@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://u2hjxmsa10wa" path="res://scenes/mana_rock.tscn" id="7_1vdl1"]
 [ext_resource type="PackedScene" uid="uid://crlkytgdorv4t" path="res://scenes/shockwave_effect.tscn" id="7_fi5ta"]
 [ext_resource type="PackedScene" uid="uid://bxs1h0evrtwjn" path="res://scenes/the_anvil.tscn" id="8_dfwj8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ftone"]
+radius = 4.0
 
 [node name="Battlefield" type="Node2D"]
 script = ExtResource("1_1luqo")
@@ -46,7 +49,7 @@ offscreen_spawn_distance = 300.0
 [node name="Entities" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="TheSmith" type="Node2D" parent="Entities"]
+[node name="TheSmith" type="CharacterBody2D" parent="Entities"]
 y_sort_enabled = true
 script = ExtResource("2_wwrvi")
 throw_charge_buildup = 500
@@ -73,11 +76,6 @@ texture_progress = ExtResource("5_g4xcf")
 position = Vector2(0, -8)
 texture = ExtResource("2_giyxn")
 
-[node name="TheSkeleman" parent="Entities" instance=ExtResource("4_imlqk")]
-position = Vector2(-80, -66)
-
-[node name="TheSkeleman2" parent="Entities" instance=ExtResource("4_imlqk")]
-position = Vector2(-15, -66)
-
-[node name="TheSkeleman3" parent="Entities" instance=ExtResource("4_imlqk")]
-position = Vector2(98, -42)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/TheSmith"]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_ftone")
