@@ -46,9 +46,9 @@ spawn_data = Array[ExtResource("4_msk22")]([SubResource("Resource_m0wd4"), SubRe
 [node name="AdventureMusicPlayer" type="AudioStreamPlayer" parent="."]
 process_mode = 3
 stream = ExtResource("7_qyod8")
-volume_db = -20.0
 autoplay = true
+bus = &"Music"
 
 [node name="AnvilStrikePlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_o8r17")
-volume_db = -10.0
+bus = &"SFX"

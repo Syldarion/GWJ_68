@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://qtdqnss7q8n8"]
+[gd_scene load_steps=17 format=3 uid="uid://qtdqnss7q8n8"]
 
 [ext_resource type="Script" path="res://scripts/UIController.gd" id="1_xl5gl"]
 [ext_resource type="Texture2D" uid="uid://xq0oblu70xp4" path="res://sprites/ForgemasterUI_HPBarUnderlay.png" id="2_0vasr"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://cjt4r4mv3pldr" path="res://sprites/kenney/fantasy-borders/panel-transparent-center-001.png" id="4_5pnwe"]
 [ext_resource type="Texture2D" uid="uid://dqepqmsfrlm8x" path="res://sprites/ForgemasterUI_HPBarInlay.png" id="4_8v0kt"]
 [ext_resource type="Texture2D" uid="uid://bvl00ob8p2yqo" path="res://sprites/skull16px.png" id="4_m81yg"]
+[ext_resource type="Texture2D" uid="uid://bxpoxb00txp3a" path="res://sprites/Pause16x16.png" id="9_ommyk"]
+[ext_resource type="Texture2D" uid="uid://n7v6po2ji2nb" path="res://sprites/kenney/fantasy-borders/panel-transparent-center-000.png" id="10_kje0k"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_3i6i0"]
 font_size = 12
@@ -26,7 +28,11 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_yxynw"]
 font_size = 24
 
+[sub_resource type="LabelSettings" id="LabelSettings_7g8jy"]
+font_size = 32
+
 [node name="GameUI" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,15 +129,6 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="GameTimerLabel" type="Label" parent="CanvasLayer/CenterContainer"]
-layout_mode = 2
-offset_left = 579.0
-offset_top = 12.0
-offset_right = 700.0
-offset_bottom = 79.0
-text = "00:00"
-label_settings = SubResource("LabelSettings_yx4e1")
-
 [node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/CenterContainer"]
 layout_mode = 1
 anchors_preset = 8
@@ -150,6 +147,30 @@ patch_margin_left = 16
 patch_margin_top = 16
 patch_margin_right = 16
 patch_margin_bottom = 16
+
+[node name="PauseButton" type="Button" parent="CanvasLayer/CenterContainer/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = -24.0
+offset_right = 50.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(2, 2)
+icon = ExtResource("9_ommyk")
+
+[node name="GameTimerLabel" type="Label" parent="CanvasLayer/CenterContainer"]
+layout_mode = 2
+offset_left = 579.0
+offset_top = 12.0
+offset_right = 700.0
+offset_bottom = 79.0
+text = "00:00"
+label_settings = SubResource("LabelSettings_yx4e1")
 
 [node name="KillCountLabel" type="Label" parent="CanvasLayer"]
 anchors_preset = 1
@@ -178,3 +199,86 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("4_m81yg")
+
+[node name="PauseMenu" type="NinePatchRect" parent="CanvasLayer"]
+process_mode = 2
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -129.0
+offset_top = -182.0
+offset_right = 129.0
+offset_bottom = 182.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_kje0k")
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
+
+[node name="Label" type="Label" parent="CanvasLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 8.0
+offset_bottom = 53.0
+grow_horizontal = 2
+text = "PAUSED"
+label_settings = SubResource("LabelSettings_7g8jy")
+horizontal_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -79.5
+offset_right = 96.0
+offset_bottom = 79.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="MusicVolumeSlider" type="HSlider" parent="CanvasLayer/PauseMenu/VBox"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+
+[node name="Label" type="Label" parent="CanvasLayer/PauseMenu/VBox/MusicVolumeSlider"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -22.0
+offset_bottom = 1.0
+grow_horizontal = 2
+text = "Music Volume"
+
+[node name="SFXVolumeSlider" type="HSlider" parent="CanvasLayer/PauseMenu/VBox"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+
+[node name="Label" type="Label" parent="CanvasLayer/PauseMenu/VBox/SFXVolumeSlider"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -22.0
+offset_bottom = 1.0
+grow_horizontal = 2
+text = "SFX Volume"
+
+[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/VBox"]
+layout_mode = 2
+text = "Resume Game"
+
+[connection signal="pressed" from="CanvasLayer/CenterContainer/NinePatchRect/PauseButton" to="." method="_on_pause_button_pressed"]
+[connection signal="drag_ended" from="CanvasLayer/PauseMenu/VBox/MusicVolumeSlider" to="." method="_on_music_volume_slider_drag_ended"]
+[connection signal="drag_ended" from="CanvasLayer/PauseMenu/VBox/SFXVolumeSlider" to="." method="_on_sfx_volume_slider_drag_ended"]
+[connection signal="pressed" from="CanvasLayer/PauseMenu/VBox/ResumeButton" to="." method="_on_resume_button_pressed"]
