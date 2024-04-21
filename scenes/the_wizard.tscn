@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://ci6vhuj7foncg"]
+
+[ext_resource type="Script" path="res://scripts/EnemyController.gd" id="1_1gse6"]
+[ext_resource type="PackedScene" uid="uid://dgno1ypt8bqec" path="res://scenes/the_fireball.tscn" id="2_qsf5t"]
+[ext_resource type="Texture2D" uid="uid://cch8dc6hu5uje" path="res://sprites/kenney/tiny-dungeon/tile_0111.png" id="3_yas68"]
+[ext_resource type="Texture2D" uid="uid://pxg562w380ir" path="res://sprites/kenney/fantasy-borders/panel-border-015.png" id="4_xvg4h"]
+[ext_resource type="Texture2D" uid="uid://gxaajek5wcan" path="res://sprites/kenney/fantasy-borders/panel-transparent-center-015-fill.png" id="5_wd7g2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wm5oa"]
+radius = 4.0
+
+[node name="TheWizard" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_1gse6")
+move_speed = 10.0
+max_health = 20
+attack_range = 128.0
+attack_cooldown = 4.0
+attack_damage = 20
+attack_scene = ExtResource("2_qsf5t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_yas68")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_wm5oa")
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+offset_left = -8.0
+offset_top = -13.0
+offset_right = 56.0
+offset_bottom = 3.0
+scale = Vector2(0.25, 0.25)
+step = 0.1
+value = 20.0
+nine_patch_stretch = true
+stretch_margin_left = 4
+stretch_margin_top = 4
+stretch_margin_right = 4
+stretch_margin_bottom = 4
+texture_over = ExtResource("4_xvg4h")
+texture_progress = ExtResource("5_wd7g2")

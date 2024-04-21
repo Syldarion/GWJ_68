@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://7wtkpj0bycrc"]
 
-[ext_resource type="Texture2D" uid="uid://dpa73clxw8asm" path="res://sprites/kenney/tiny-dungeon/tile_0108.png" id="1_cyopw"]
 [ext_resource type="Script" path="res://scripts/EnemyController.gd" id="1_gd4w2"]
 [ext_resource type="PackedScene" uid="uid://c5oksfyq84fjq" path="res://scenes/the_dagger.tscn" id="2_gjsap"]
 [ext_resource type="Texture2D" uid="uid://gxaajek5wcan" path="res://sprites/kenney/fantasy-borders/panel-transparent-center-015-fill.png" id="3_bfxos"]
+[ext_resource type="Texture2D" uid="uid://cwycfx7etu2ho" path="res://sprites/TheSkeleton_16x16.png" id="3_lcsg7"]
 [ext_resource type="Texture2D" uid="uid://pxg562w380ir" path="res://sprites/kenney/fantasy-borders/panel-border-015.png" id="3_o073b"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wm5oa"]
@@ -16,7 +16,7 @@ max_health = 40
 attack_scene = ExtResource("2_gjsap")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_cyopw")
+texture = ExtResource("3_lcsg7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_wm5oa")

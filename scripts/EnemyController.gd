@@ -48,8 +48,12 @@ func _physics_process(delta):
 	if knockback_timer > 0:
 		knockback_timer -= delta
 	elif player_target:
-		var movement_dir = (player_target.global_position - global_position).normalized()
-		velocity = movement_dir * move_speed
+		var distance_to_player = global_position.distance_to(player_target.global_position)
+		if distance_to_player > attack_range:
+			var movement_dir = (player_target.global_position - global_position).normalized()
+			velocity = movement_dir * move_speed
+		else:
+			velocity = Vector2.ZERO
 	move_and_collide(velocity * delta)
 
 

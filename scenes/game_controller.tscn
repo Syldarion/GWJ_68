@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cv7hl548sos71"]
+[gd_scene load_steps=12 format=3 uid="uid://cv7hl548sos71"]
 
 [ext_resource type="Script" path="res://scripts/GameController.gd" id="1_gyq0k"]
 [ext_resource type="PackedScene" uid="uid://dmrxjjmx1blrt" path="res://scenes/battlefield.tscn" id="1_olhss"]
@@ -15,29 +15,23 @@ spawn_time_seconds = 0
 enemy_name = "skeleman"
 enemy_count = 25
 
-[sub_resource type="Resource" id="Resource_io52i"]
+[sub_resource type="Resource" id="Resource_wat4v"]
 script = ExtResource("4_msk22")
 spawn_time_seconds = 0
-enemy_name = "skeleman"
-enemy_count = 25
-
-[sub_resource type="Resource" id="Resource_mg1en"]
-script = ExtResource("4_msk22")
-spawn_time_seconds = 0
-enemy_name = "skeleman"
-enemy_count = 25
+enemy_name = "wizard"
+enemy_count = 10
 
 [sub_resource type="Resource" id="Resource_7higk"]
 script = ExtResource("4_msk22")
 spawn_time_seconds = 0
 enemy_name = "skeleman"
-enemy_count = 25
+enemy_count = 15
 
 [node name="GameController" type="Node2D"]
 script = ExtResource("1_gyq0k")
 upgrade_screen_scene = ExtResource("4_8oncr")
 hammer_minigame_scene = ExtResource("3_brusl")
-spawn_data = Array[ExtResource("4_msk22")]([SubResource("Resource_m0wd4"), SubResource("Resource_io52i"), SubResource("Resource_mg1en"), SubResource("Resource_7higk")])
+spawn_data = Array[ExtResource("4_msk22")]([SubResource("Resource_m0wd4"), SubResource("Resource_wat4v"), SubResource("Resource_7higk")])
 
 [node name="Battlefield" parent="." instance=ExtResource("1_olhss")]
 

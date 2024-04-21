@@ -2,19 +2,27 @@ extends Node2D
 
 signal shockwave_hit_enemy(entity_hit)
 
+@onready var shockwave_area = $ShockwaveArea as Area2D
+
 var radius = 0
 var wave_damage = 0
 var knockback_force = 0
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$ShockwaveArea.connect("body_entered", _on_body_entered)
+	shockwave_area.connect("body_entered", _on_body_entered)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	$ShockwaveArea/CollisionShape2D.shape.radius = radius
 	queue_redraw()
+	
+	for area in shockwave_area.get_overlapping_areas():
+		var area_parent = area.get_parent()
+		if area_parent.is_in_group("projectile"):
+			area_parent.queue_free()
 
 
 func _on_body_entered(body):
@@ -22,6 +30,8 @@ func _on_body_entered(body):
 		body.damage_entity(wave_damage)
 		body.knockback_entity((body.global_position - global_position).normalized() * knockback_force)
 		shockwave_hit_enemy.emit(body)
+	if body.is_in_group("projectile"):
+		body.queue_free()
 
 
 func _draw():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dmrxjjmx1blrt"]
+[gd_scene load_steps=15 format=3 uid="uid://dmrxjjmx1blrt"]
 
 [ext_resource type="Script" path="res://scenes/battlefield.gd" id="1_1luqo"]
 [ext_resource type="Texture2D" uid="uid://dwadgimq7g8s1" path="res://sprites/kenney/tiny-dungeon/tile_0086.png" id="2_giyxn"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://u2hjxmsa10wa" path="res://scenes/mana_rock.tscn" id="7_1vdl1"]
 [ext_resource type="PackedScene" uid="uid://crlkytgdorv4t" path="res://scenes/shockwave_effect.tscn" id="7_fi5ta"]
 [ext_resource type="PackedScene" uid="uid://bxs1h0evrtwjn" path="res://scenes/the_anvil.tscn" id="8_dfwj8"]
+[ext_resource type="PackedScene" uid="uid://ci6vhuj7foncg" path="res://scenes/the_wizard.tscn" id="9_r36w3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ftone"]
 radius = 4.0
@@ -41,7 +42,8 @@ spawner_list = {
 "anvil": ExtResource("8_dfwj8"),
 "manarock": ExtResource("7_1vdl1"),
 "shockwave": ExtResource("7_fi5ta"),
-"skeleman": ExtResource("4_imlqk")
+"skeleman": ExtResource("4_imlqk"),
+"wizard": ExtResource("9_r36w3")
 }
 entity_parent_node = NodePath("../Entities")
 offscreen_spawn_distance = 300.0
