@@ -1,7 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4tb8qaqofneu"]
+[gd_scene load_steps=14 format=3 uid="uid://c4tb8qaqofneu"]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_gyncc"]
 [ext_resource type="PackedScene" uid="uid://cv7hl548sos71" path="res://scenes/game_controller.tscn" id="2_647u5"]
+[ext_resource type="Texture2D" uid="uid://d33noj5h4m2n0" path="res://sprites/manaforge_howto_hammer.png" id="3_vpejh"]
+[ext_resource type="Texture2D" uid="uid://cwvc3u5m54std" path="res://sprites/manaforge_howto_throw.png" id="4_phxb4"]
+[ext_resource type="Texture2D" uid="uid://bjluvy04ordfx" path="res://sprites/manaforge_howto_upgrades.png" id="5_0duy2"]
+[ext_resource type="Texture2D" uid="uid://itflmpq0185c" path="res://sprites/manaforge_howto_anvil.png" id="6_kfkht"]
+[ext_resource type="Texture2D" uid="uid://d1xymoe8gmodo" path="res://sprites/Arrow16x16.png" id="7_i105w"]
+[ext_resource type="Texture2D" uid="uid://bm86d1inw78i2" path="res://sprites/kenney/input-prompts/kbm/keyboard_arrows_all.png" id="8_e7uss"]
+[ext_resource type="Texture2D" uid="uid://xy48q3ta6db6" path="res://sprites/kenney/input-prompts/kbm/mouse_right.png" id="9_j13nl"]
+[ext_resource type="Texture2D" uid="uid://eh0c55ojjeah" path="res://sprites/kenney/input-prompts/kbm/keyboard_e.png" id="10_wascg"]
+[ext_resource type="Texture2D" uid="uid://52ta5n38xcna" path="res://sprites/kenney/input-prompts/kbm/keyboard_space.png" id="11_0w7s8"]
+[ext_resource type="Texture2D" uid="uid://blf3caujv8x43" path="res://sprites/kenney/input-prompts/kbm/keyboard_escape.png" id="12_3b8b8"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_r2f3x"]
 font_size = 128
@@ -18,6 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gyncc")
 game_scene = ExtResource("2_647u5")
+howto_slides = Array[Resource]([ExtResource("3_vpejh"), ExtResource("4_phxb4"), ExtResource("5_0duy2"), ExtResource("6_kfkht")])
 
 [node name="MenuButtons" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -97,14 +108,155 @@ text = "SFX Volume"
 layout_mode = 2
 text = "Back"
 
-[node name="CenterContainer" type="Control" parent="."]
+[node name="HowToControl" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -568.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="HowToControl"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -282.0
+offset_top = -211.5
+offset_right = 282.0
+offset_bottom = 211.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_vpejh")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="NextSlideButton" type="Button" parent="HowToControl/TextureRect"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 33.0
+offset_top = -12.0
+offset_right = 57.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+icon = ExtResource("7_i105w")
+
+[node name="PreviousSlideButton" type="Button" parent="HowToControl/TextureRect"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = 13.0
+offset_right = -22.0
+offset_bottom = 37.0
+grow_vertical = 2
+rotation = 3.14159
+icon = ExtResource("7_i105w")
+
+[node name="HowToBackButton" type="Button" parent="HowToControl"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -22.5
+offset_top = -51.0
+offset_right = 22.5
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HowToControl"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 47.0
+offset_top = -181.5
+offset_right = 257.0
+offset_bottom = 181.5
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HowToControl/VBoxContainer"]
+layout_mode = 2
+text = "CONTROLS"
+
+[node name="Control" type="HBoxContainer" parent="HowToControl/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HowToControl/VBoxContainer/Control"]
+layout_mode = 2
+texture = ExtResource("8_e7uss")
+
+[node name="Label" type="Label" parent="HowToControl/VBoxContainer/Control"]
+layout_mode = 2
+text = "Move"
+
+[node name="Control5" type="HBoxContainer" parent="HowToControl/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HowToControl/VBoxContainer/Control5"]
+layout_mode = 2
+texture = ExtResource("9_j13nl")
+
+[node name="Label" type="Label" parent="HowToControl/VBoxContainer/Control5"]
+layout_mode = 2
+text = "Throw Anvil (Hold)"
+
+[node name="Control2" type="HBoxContainer" parent="HowToControl/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HowToControl/VBoxContainer/Control2"]
+layout_mode = 2
+texture = ExtResource("10_wascg")
+
+[node name="Label" type="Label" parent="HowToControl/VBoxContainer/Control2"]
+layout_mode = 2
+text = "Interact"
+
+[node name="Control3" type="HBoxContainer" parent="HowToControl/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HowToControl/VBoxContainer/Control3"]
+layout_mode = 2
+texture = ExtResource("11_0w7s8")
+
+[node name="Label" type="Label" parent="HowToControl/VBoxContainer/Control3"]
+layout_mode = 2
+text = "Strike Anvil"
+
+[node name="Control4" type="HBoxContainer" parent="HowToControl/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HowToControl/VBoxContainer/Control4"]
+layout_mode = 2
+texture = ExtResource("12_3b8b8")
+
+[node name="Label" type="Label" parent="HowToControl/VBoxContainer/Control4"]
+layout_mode = 2
+text = "Pause"
+
+[node name="TitleControl" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 573.0
 grow_horizontal = 2
 
-[node name="RichTextLabel" type="Label" parent="CenterContainer"]
+[node name="RichTextLabel" type="Label" parent="TitleControl"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -116,7 +268,7 @@ label_settings = SubResource("LabelSettings_r2f3x")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="CenterContainer/RichTextLabel"]
+[node name="Label" type="Label" parent="TitleControl/RichTextLabel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -137,3 +289,6 @@ text = "(sure hope i come back to finish this menu)"
 [connection signal="drag_ended" from="SettingsOptions/MusicVolumeSlider" to="." method="_on_music_volume_slider_drag_ended"]
 [connection signal="drag_ended" from="SettingsOptions/SFXVolumeSlider" to="." method="_on_sfx_volume_slider_drag_ended"]
 [connection signal="pressed" from="SettingsOptions/SettingsBackButton" to="." method="_on_settings_back_button_pressed"]
+[connection signal="pressed" from="HowToControl/TextureRect/NextSlideButton" to="." method="_on_next_slide_button_pressed"]
+[connection signal="pressed" from="HowToControl/TextureRect/PreviousSlideButton" to="." method="_on_previous_slide_button_pressed"]
+[connection signal="pressed" from="HowToControl/HowToBackButton" to="." method="_on_how_to_back_button_pressed"]

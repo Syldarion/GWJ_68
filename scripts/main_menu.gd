@@ -1,10 +1,13 @@
 extends Control
 
 @export var game_scene : PackedScene
+@export var howto_slides : Array[Resource]
 
 @onready var master_bus = AudioServer.get_bus_index("Master")
 @onready var sfx_bus = AudioServer.get_bus_index("SFX")
 @onready var music_bus = AudioServer.get_bus_index("Music")
+
+var how_to_slide_index = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -50,4 +53,20 @@ func _on_settings_button_pressed():
 
 
 func _on_how_to_play_button_pressed():
-	pass # Replace with function body.
+	$HowToControl.show()
+	$MenuButtons.hide()
+
+
+func _on_next_slide_button_pressed():
+	how_to_slide_index += 1
+	$HowToControl/TextureRect.texture = howto_slides[how_to_slide_index % 4]
+
+
+func _on_previous_slide_button_pressed():
+	how_to_slide_index -= 1
+	$HowToControl/TextureRect.texture = howto_slides[how_to_slide_index % 4]
+
+
+func _on_how_to_back_button_pressed():
+	$HowToControl.hide()
+	$MenuButtons.show()
