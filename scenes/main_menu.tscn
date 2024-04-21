@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c4tb8qaqofneu"]
+[gd_scene load_steps=15 format=3 uid="uid://c4tb8qaqofneu"]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_gyncc"]
 [ext_resource type="PackedScene" uid="uid://cv7hl548sos71" path="res://scenes/game_controller.tscn" id="2_647u5"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://eh0c55ojjeah" path="res://sprites/kenney/input-prompts/kbm/keyboard_e.png" id="10_wascg"]
 [ext_resource type="Texture2D" uid="uid://52ta5n38xcna" path="res://sprites/kenney/input-prompts/kbm/keyboard_space.png" id="11_0w7s8"]
 [ext_resource type="Texture2D" uid="uid://blf3caujv8x43" path="res://sprites/kenney/input-prompts/kbm/keyboard_escape.png" id="12_3b8b8"]
+[ext_resource type="Texture2D" uid="uid://b6gsj30p6g6n8" path="res://sprites/ManaForge_LOGO.PNG" id="13_doc7v"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_r2f3x"]
 font_size = 128
@@ -257,6 +258,7 @@ offset_bottom = 573.0
 grow_horizontal = 2
 
 [node name="RichTextLabel" type="Label" parent="TitleControl"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -282,6 +284,19 @@ offset_bottom = -193.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "(sure hope i come back to finish this menu)"
+
+[node name="TextureRect" type="TextureRect" parent="TitleControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 22.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_doc7v")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="pressed" from="MenuButtons/StartGameButton" to="." method="_on_start_game_button_pressed"]
 [connection signal="pressed" from="MenuButtons/HowToPlayButton" to="." method="_on_how_to_play_button_pressed"]
